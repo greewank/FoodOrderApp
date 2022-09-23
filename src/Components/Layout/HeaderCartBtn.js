@@ -6,8 +6,8 @@ import "./HeaderCartBtn.css";
 const HeaderCartButton = (props) => {
   const cartCtx = useContext(CartContext);
 
-  const numberOfCartItems = cartCtx.items.reduce((currNumber, item) => {
-    return currNumber + item.amount;
+  const numberOfCartItems = cartCtx.items.reduce((cartNumber, item) => {
+    return cartNumber + item.amount;
   }, 0);
 
   return (

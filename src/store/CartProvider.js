@@ -8,30 +8,33 @@ const defaultCartState = {
 
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
-    const updatedItems = state.items.concat();
+    const updatedItems = state.items.concat(action.item);
     const updatedTotalAmount =
       state.totalAmount + action.item.price * action.item.amount;
-    return {
-      items: updatedItems,
-      totalAmount: updatedTotalAmount,
-    };
+    return { items: updatedItems, totalAmount: updatedTotalAmount };
   }
-  return defaultCartState;
 };
 
+// Goal of this file is to manage cart context data and provide it to all the components that need it
 const CartProvider = (props) => {
-  const [cartState, dispatchItem] = useReducer(cartReducer, defaultCartState);
+  const [cartState, dispatchCartAction] = useReducer(
+    cartReducer,
+    defaultCartState
+  );
 
   const addItemToCartHandler = (item) => {
-    dispatchItem({ type: "ADD", item: item });
+    dispatchCartAction({ type: "ADD", item: item });
   };
-  const removeItemFromCartHandler = (id) => {};
+
+  const removeItemFromCartHandler = (id) => {
+    dispatchCartAction({ type: "REMOVE", id: id });
+  };
 
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
-    addItems: addItemToCartHandler,
-    removeItems: removeItemFromCartHandler,
+    addItem: addItemToCartHandler,
+    removeItem: removeItemFromCartHandler,
   };
 
   return (
@@ -40,4 +43,5 @@ const CartProvider = (props) => {
     </CartContext.Provider>
   );
 };
+
 export default CartProvider;
